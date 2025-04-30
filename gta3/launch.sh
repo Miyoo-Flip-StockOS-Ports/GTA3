@@ -7,6 +7,19 @@ GAMEDIR="$(cd "$(dirname "$0")" && pwd)"
 
 cd $GAMEDIR
 
+if [[ ! -d "$GAMEDIR/data" ]]; then
+  echo "Missing game files. Copy original game files to roms/ports/gtavc." > $CUR_TTY
+  sleep 5
+  exit 1
+fi
+
+# Check if re3 project files are already installed
+# (needs to be done after the game files are copied, since it overwrites certain files)
+if [[ -d "$GAMEDIR/re3-data" ]]; then
+  echo "Installing re3 files..."
+  cp -rf "$GAMEDIR/re3-data"/* "$GAMEDIR" && rm -rf "$GAMEDIR/re3-data"
+fi
+
 # Uncomment to Swap A/B & X/Y
 #export SDL_GAMECONTROLLERCONFIG="030000005e0400008e02000014010000,X360 Controller,a:b1,b:b0,back:b6,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b8,leftshoulder:b4,leftstick:b9,lefttrigger:a2,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b10,righttrigger:a5,rightx:a3,righty:a4,start:b7,x:b3,y:b2,platform:Linux,"
 export LD_LIBRARY_PATH="$GAMEDIR/libs":$LD_LIBRARY_PATH
